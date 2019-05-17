@@ -1,9 +1,11 @@
 #!/usr/bin/env ruby
-#require_relative '../lib/ur-sock'
-require 'ur-sock'
+require_relative '../lib/ur-sock'
+#require 'ur-sock'
 
 conf = UR::XMLConfigFile.new "test.conf.xml"
 output_names, output_types = conf.get_recipe('out')
+setp_names, setp_types = conf.get_recipe('setp')
+
 
 con     = UR::Rtde.new('localhost').connect
 version = con.controller_version
@@ -11,6 +13,11 @@ version = con.controller_version
 if not con.send_output_setup(output_names, output_types)
   puts 'Unable to configure output'
 end
+
+setp = con.send_input_setup(setp_names, setp_types)
+
+setp["speed_slider_mask"] = 1
+setp["speed_slider_fraction"] = 0
 
 if not con.send_start
   puts 'Unable to start synchronization'
