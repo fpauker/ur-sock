@@ -6,7 +6,6 @@ conf = UR::XMLConfigFile.new "test.conf.xml"
 output_names, output_types = conf.get_recipe('out')
 setp_names, setp_types = conf.get_recipe('setp')
 
-
 con     = UR::Rtde.new('localhost').connect
 version = con.controller_version
 
@@ -22,6 +21,8 @@ setp["speed_slider_fraction"] = 0
 if not con.send_start
   puts 'Unable to start synchronization'
 end
+
+con.send(setp)
 
 begin
   while true

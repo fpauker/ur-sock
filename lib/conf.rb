@@ -8,8 +8,8 @@ module UR
       @types = {}
       doc = XML::Smart.open(filename)
       doc.find('/rtde_config/recipe/@key').each do |key|
-        @names[key.value] = doc.find("//field/@name").map {|x| x.to_s }
-        @types[key.value] = doc.find("//field/@type").map {|x| x.to_s }
+        @names[key.value] = doc.find("/rtde_config/recipe[@key='#{key}']/field/@name").map {|x| x.to_s }
+        @types[key.value] = doc.find("/rtde_config/recipe[@key='#{key}']/field/@type").map {|x| x.to_s }
       end
     end
 
