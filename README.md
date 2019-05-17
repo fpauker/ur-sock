@@ -15,7 +15,13 @@ To run the server we need the following packages:
 
 ```
 
+### Example
 
+Connecting to robot
+
+...
+
+...
 
 ## Contributing
 
