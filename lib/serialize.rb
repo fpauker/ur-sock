@@ -125,9 +125,9 @@ module UR
           raise RuntimeError.new('List sizes are not identical.')
         end
         l = []
-        l.append @recipe_id unless @recipe_id
+        l.append @recipe_id if @recipe_id
         names.each do |i|
-          raise RuntimeEror.new('Uninitialized parameter: ' + i) unless @values[i]
+          raise RuntimeError.new('Uninitialized parameter: ' + i) unless @values[i]
           l.push *@values[i]
         end
         l
@@ -140,7 +140,7 @@ module UR
         rmd.id = buf.unpack('C')[0]
         rmd.types = buf[1..-1].split(',')
         rmd.fmt = 'C'
-        #puts "DataConfig: " +rmd.to_s
+        p rmd.types
         rmd.types.each do |i|
           if i == 'INT32'
             rmd.fmt += 'i>'
@@ -166,12 +166,14 @@ module UR
             raise TypeError 'Unknown data type: ' + i
           end
         end
-        @fmt = rmd.fmt
         rmd
       end
 
       def pack(state)
+        p state.class
         l = state.pack(self.names, self.types)
+        p l
+        p self.fmt
         l.pack(self.fmt)
       end
 
