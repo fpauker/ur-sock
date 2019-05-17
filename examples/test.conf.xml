@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <rtde_config>
-  <recipe key="setp">
+  <recipe key="speed">
 		<field name="speed_slider_mask" type="UINT32"/>
 		<field name="speed_slider_fraction" type="DOUBLE"/>
 	</recipe>
