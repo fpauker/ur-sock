@@ -53,7 +53,7 @@ module UR
 
     def pause
       @sock.write("pause\n")
-      @logger.info "paused program"
+      @logger.info "paused   program"
       @logger.info @sock.gets
     end
   end
