@@ -91,6 +91,7 @@ module UR
       @sock.write ("get loaded program\n")
       line = @sock.gets
       @logger.info line
+      path = $1.strip if line.match(/^Loaded program:\s(.+)/)
     end
   end
 
