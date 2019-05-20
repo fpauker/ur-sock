@@ -5,8 +5,9 @@ Universal robot interface implementation in ruby. This library provides function
 ## Getting Started
 
 This library uses 3 interfaces of the universal robot:
-
-Uses the RTDE socekt of universal robots. The commands are sent using TCP socket on port 30002.
+* RTDE Interface (port 30002)
+* Primary/Secondary Interface (port 30003)
+* Dashboard Interface (port 29999)
 
 ### Prerequisites & Intallation
 
@@ -21,21 +22,46 @@ gem install xml-smart
 gem install ur-sock
 ```
 
-### Functions
-```
-Config            | RTDE              | Primary/secondary | Dashboard
------------------ | ----------------- | ----------------- | -----------------
-get_recipe        | connect           | connect           | connect
+### Interfaces
 
-```
+#### RTDE
 
-### Example
+The Real-Time Data Exchange (RTDE) interface can be configured with an XML file.
+* Output: robot-, joint-, tool- and safety status, analog and digital I/O's and general purpose output registers
+* Input: digital and analog outputs and general purpose input registers
 
-Connecting to robot
+The complete documentation of all available in- and outputs can be found on:
+https://www.universal-robots.com/how-tos-and-faqs/how-to/ur-how-tos/real-time-data-exchange-rtde-guide-22229/
 
+* Loading Config file
 ```ruby
+#Loading the config file
+conf = UR::XMLConfigFile.new "test.conf.xml"
+
+#configure output
+output_names, output_types = conf.get_recipe('out')
+'''
+
+'''ruby
+### Set Speed to very slow
+# speed_names, speed_types = conf.get_recipe('speed')
+# speed = con.send_input_setup(speed_names, speed_types)
+# speed["speed_slider_mask"] = 1
+# speed["speed_slider_fraction"] = 0
+# con.send(speed)
+
 #connecting to the RTDE interfaces on port 30002
 rtde = UR::Rtde.new ('192.168.1.2').connect
+```
+
+### Examples
+
+Loading Config for RTDE interface
+```ruby
+
+```
+Connecting to robot
+
 
 #connecting to the proimary/secondary interface (psi) on port 30003
 psi = UR::Transfer.new('192.168.1.2').connect
@@ -50,8 +76,8 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 
 ## Authors
 
-* **Florian Pauker** - ** -
-* **Jürgen Mangler** - ** -
+* **Florian Pauker**
+* **Jürgen Mangler**
 
 See also the list of [contributors](https://intra.acdp.at/gogs/fpauker/ua4ur/contributors) who participated in this project.
 
