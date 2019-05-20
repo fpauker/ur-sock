@@ -29,6 +29,7 @@ module UR
       @sock.setsockopt Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1
       @sock = TCPSocket.new(@hostname, @port)
       @conn_state = ConnectionState::CONNECTED
+      @logger.info @sock.gets
       self
     end
 
@@ -53,7 +54,19 @@ module UR
 
     def pause
       @sock.write("pause\n")
-      @logger.info "paused   program"
+      @logger.info "paused program"
+      @logger.info @sock.gets
+    end
+
+    def stop
+      @sock.write("stop\n")
+      @logger.info "stopped program"
+      @logger.info @sock.gets
+    end
+
+    def robotmode
+      @sock.write("robotmode\n")
+      @logger.info "robotmode"
       @logger.info @sock.gets
     end
   end
