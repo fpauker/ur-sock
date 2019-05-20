@@ -13,6 +13,18 @@ module UR
       PAUSED = 3
     end
 
+    module ProgramState
+      NO_CONTROLLER =   "NO_CONTROLLER"
+      DISCONNECTED =    "DISCONNECTED"
+      CONFIRM_SAFETY =  "CONFIRM_SAFETY"
+      BOOTING =         "BOOTING"
+      POWER_OFF =       "POWER_OFF"
+      POWER_ON =        "POWER_ON"
+      IDLE =            "IDLE"
+      BACKDRIVE =       "BACKDRIVE"
+      RUNNING =         "RUNNING"
+    end
+
     def initialize(host, logger=Logger.new(STDOUT,level: :INFO))
       host = '//' + host if host !~ /\/\//
       uri = URI::parse(host)
@@ -46,28 +58,39 @@ module UR
       end
     end
 
-    def play
+    def start_program
       @sock.write("play\n")
-      @logger.info "start program"
-      @logger.info @sock.gets
+      line = @sock.gets
+      if line == "Starting program"
+        @logger.info line
+      else
+        @logger.error line
+      end
     end
 
-    def pause
+    def pause_program
       @sock.write("pause\n")
       @logger.info "paused program"
       @logger.info @sock.gets
     end
 
-    def stop
+    def stop_program
       @sock.write("stop\n")
       @logger.info "stopped program"
       @logger.info @sock.gets
     end
 
-    def robotmode
+    def get_robotmode
       @sock.write("robotmode\n")
-      @logger.info "robotmode"
-      @logger.info @sock.gets
+      line = @sock.gets
+      @logger.info line
+      result = $1.strip if line.match(/^Robotmode:\s(.+)/)
+    end
+
+    def get_loaded_program
+      @sock.write ("get loaded program\n")
+      line = @sock.gets
+      @logger.info line
     end
   end
 

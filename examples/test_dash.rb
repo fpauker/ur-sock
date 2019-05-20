@@ -3,21 +3,18 @@ require_relative '../lib/ur-sock'
 #require 'ur-sock'
 require_relative 'dashboard'
 
-con     = UR::Dash.new('192.168.56.101').connect
-puts con.connected?
-con.robotmode
-con.play
-sleep 10
-con.pause
+con     = UR::Dash.new('localhost').connect
+
+puts "Robotmode: " + con.get_robotmode
+if con.get_robotmode != UR::Dash::ProgramState::RUNNING
+  con.start_program
+  sleep 10
+end
+con.get_loaded_program
+con.pause_program
 sleep 5
-con.play
-con.robotmode
+con.start_program
+con.get_robotmode
 sleep 5
-con.stop
-### Set Speed to very slow
-# speed_names, speed_types = conf.get_recipe('speed')
-# speed = con.send_input_setup(speed_names, speed_types)
-# speed["speed_slider_mask"] = 1
-# speed["speed_slider_fraction"] = 0
-# con.send(speed)
+con.stop_program
 con.disconnect
