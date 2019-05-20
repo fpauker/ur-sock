@@ -62,7 +62,7 @@ Loading Config for RTDE interface
 ```
 Connecting to robot
 
-
+```ruby
 #connecting to the proimary/secondary interface (psi) on port 30003
 psi = UR::Transfer.new('192.168.1.2').connect
 
