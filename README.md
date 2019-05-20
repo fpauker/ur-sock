@@ -40,9 +40,9 @@ conf = UR::XMLConfigFile.new "test.conf.xml"
 
 #configure output
 output_names, output_types = conf.get_recipe('out')
-'''
+```
 
-'''ruby
+```ruby
 ### Set Speed to very slow
 # speed_names, speed_types = conf.get_recipe('speed')
 # speed = con.send_input_setup(speed_names, speed_types)
