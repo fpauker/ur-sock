@@ -33,7 +33,7 @@ get_recipe        | connect           | connect           | connect
 
 Connecting to robot
 
-```
+```ruby
 #connecting to the RTDE interfaces on port 30002
 rtde = UR::Rtde.new ('192.168.1.2').connect
 
