@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 require_relative '../lib/ur-sock'
 #require 'ur-sock'
-require_relative 'dashboard'
+require_relative '../lib/dashboard'
 
 con     = UR::Dash.new('localhost').connect
 con.power_on
 con.break_release
 
-con.popupmessage 'juegen & Flo'
+con.popupmessage 'juergen & Flo'
 sleep 5
 con.load_program('test')
 #con.set_operation_mode_auto
