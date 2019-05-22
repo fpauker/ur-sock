@@ -30,7 +30,7 @@ module UR
       VIOLATION = "VIOLATION"
       FAULT = "FAULT"
     end
-    
+
     module ProgramState
       NO_CONTROLLER =   'NO_CONTROLLER'
       DISCONNECTED =    'DISCONNECTED'
@@ -266,22 +266,56 @@ module UR
       end
     end
 
+    def get_safety_mode
+      @sock.write("safetymode\n")
+      line = @sock.gets.strip
+      @logger.info line
+      result = $1.strip if line.match(/^Safetymode:\s(.+)/)
+    end
 
+    def unlock_protective_stop
+      @sock.write("unlock protective stop\n")
+      if line.match(/^Protective/)
+        @logger.info line
+        true
+      else
+        @logger.error line
+        nil
+      end
+    end
 
+    def close_safety_popup
+      @sock.write("close safety popup\n")
+      if line.match(/^closing/)
+        @logger.info line
+        true
+      else
+        @logger.error line
+        nil
+      end
+    end
 
+    def load_installation
+      @sock.write("load installation\n")
+      if line.match(/^Loading/)
+        @logger.info line
+        true
+      else
+        @logger.error line
+        nil
+      end
+    end
 
-
-
-
-
-
-
-
-
-
-
-
+    def restart_safety
+      @sock.write("restart safety\n")
+      if line.match(/^Brake/)
+        @logger.info line
+        true
+      else
+        @logger.error line
+        nil
+      end
+    end
 
   end
-
 end
