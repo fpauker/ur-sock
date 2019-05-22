@@ -7,7 +7,7 @@ module UR
 
   class Rtde
     PROTOCOL_VERSION = 2
-    robotmode = {-1 => 'No Controller',
+    @@robotmode = {-1 => 'No Controller',
                   0 => 'Disconnected',
                   1 => 'Confirm Safety',
                   2 => 'Booting',
@@ -29,12 +29,17 @@ module UR
       RTDE_CONTROL_PACKAGE_START = 83           # ASCII S
       RTDE_CONTROL_PACKAGE_PAUSE = 80           # ascii p
     end #}}}
+
     module ConnectionState #{{{
       DISCONNECTED = 0
       CONNECTED = 1
       STARTED = 2
       PAUSED = 3
     end #}}}
+
+    def get_robotmode
+      @@robotmode
+    end
 
     def initialize(host, logger=Logger.new(STDOUT,level: :INFO)) #{{{
       host = '//' + host if host !~ /\/\//
