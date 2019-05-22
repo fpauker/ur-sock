@@ -7,6 +7,17 @@ module UR
 
   class Rtde
     PROTOCOL_VERSION = 2
+    robotmode = {-1 => 'No Controller',
+                  0 => 'Disconnected',
+                  1 => 'Confirm Safety',
+                  2 => 'Booting',
+                  3 => 'Power Off',
+                  4 => 'Power On',
+                  5 => 'Idle',
+                  6 => 'Backdrive',
+                  7 => 'Running',
+                  8 => 'Updating Firmware'
+                }
 
     module Command #{{{
       RTDE_REQUEST_PROTOCOL_VERSION = 86        # ASCII V

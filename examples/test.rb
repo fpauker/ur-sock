@@ -5,7 +5,7 @@ require_relative '../lib/ur-sock'
 conf = UR::XMLConfigFile.new "test.conf.xml"
 output_names, output_types = conf.get_recipe('out')
 
-con     = UR::Rtde.new('localhost').connect
+con     = UR::Rtde.new('192.168.56.101').connect
 version = con.controller_version
 
 ### Setup output
@@ -27,6 +27,7 @@ begin
   while true
     data = con.receive
     if data
+      puts con.robotmode[data['robot_mode']]
       puts data["timestamp"].round.to_s + "\t" + data["actual_TCP_pose"].to_s
     end
   end
