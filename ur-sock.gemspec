@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name             = "ur-sock"
-  s.version          = "0.1"
+  s.version          = "0.3"
   s.platform         = Gem::Platform::RUBY
   s.license          = "LGPL-3.0"
   s.summary          = "Preliminary release of Universal Robot (UR) Socket Communication."
