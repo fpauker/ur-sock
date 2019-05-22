@@ -13,12 +13,24 @@ module UR
       PAUSED = 'PAUSED'
     end
 
-    module ProgramStat
+    module ProgramState
       STOPPED = 'STOPPED'
       PLAYING ='PLAYING'
       PAUSED = 'PAUSED'
     end
 
+    module SafetyMode
+      NORMAL = "NORMAL"
+      REDUCED = "REDUCED"
+      PROTECTIVE_STOP = "PROTECTIVE_STOP"
+      RECOVERY = "RECOVERY"
+      SAFEGUARD_STOP = "SAFEGUARD_STOP"
+      SYSTEM_EMERGENCY_STOP = "SYSTEM_EMERGENCY_STOP"
+      ROBOT_EMERGENCY_STOP = "ROBOT_EMERGENCY_STOP"
+      VIOLATION = "VIOLATION"
+      FAULT = "FAULT"
+    end
+    
     module ProgramState
       NO_CONTROLLER =   'NO_CONTROLLER'
       DISCONNECTED =    'DISCONNECTED'
