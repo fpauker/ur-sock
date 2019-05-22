@@ -7,22 +7,40 @@ module UR
 
   class Dash
     module ConnectionState
-      DISCONNECTED = 0
-      CONNECTED = 1
-      STARTED = 2
-      PAUSED = 3
+      DISCONNECTED = 'DISCONNECTED'
+      CONNECTED = 'CONNECTED'
+      STARTED = 'STARTED'
+      PAUSED = 'PAUSED'
     end
 
     module ProgramState
-      NO_CONTROLLER =   "NO_CONTROLLER"
-      DISCONNECTED =    "DISCONNECTED"
-      CONFIRM_SAFETY =  "CONFIRM_SAFETY"
-      BOOTING =         "BOOTING"
-      POWER_OFF =       "POWER_OFF"
-      POWER_ON =        "POWER_ON"
-      IDLE =            "IDLE"
-      BACKDRIVE =       "BACKDRIVE"
-      RUNNING =         "RUNNING"
+      STOPPED = 'STOPPED'
+      PLAYING ='PLAYING'
+      PAUSED = 'PAUSED'
+    end
+
+    module SafetyMode
+      NORMAL = "NORMAL"
+      REDUCED = "REDUCED"
+      PROTECTIVE_STOP = "PROTECTIVE_STOP"
+      RECOVERY = "RECOVERY"
+      SAFEGUARD_STOP = "SAFEGUARD_STOP"
+      SYSTEM_EMERGENCY_STOP = "SYSTEM_EMERGENCY_STOP"
+      ROBOT_EMERGENCY_STOP = "ROBOT_EMERGENCY_STOP"
+      VIOLATION = "VIOLATION"
+      FAULT = "FAULT"
+    end
+
+    module ProgramState
+      NO_CONTROLLER =   'NO_CONTROLLER'
+      DISCONNECTED =    'DISCONNECTED'
+      CONFIRM_SAFETY =  'CONFIRM_SAFETY'
+      BOOTING =         'BOOTING'
+      POWER_OFF =       'POWER_OFF'
+      POWER_ON =        'POWER_ON'
+      IDLE =            'IDLE'
+      BACKDRIVE =       'BACKDRIVE'
+      RUNNING =         'RUNNING'
     end
 
     def initialize(host, logger=Logger.new(STDOUT,level: :INFO))
@@ -58,56 +76,76 @@ module UR
       end
     end
 
+    def load_program (programname)
+      @logger.info "loadprogram"
+      send = "load " + programname + ".urp\n"
+      puts send
+      @sock.write (send)
+      line = @sock.gets.strip
+      if line.match(/^./) == 'L'
+        @logger.info line
+        true
+      else
+        @logger.error line
+        nil
+      end
+    end
+
     def start_program
       @sock.write("play\n")
       line = @sock.gets.strip
       if line == "Starting program"
         @logger.info line
+        true
       else
         @logger.error line
+        nil
       end
-    end
-
-    def power_off
-      @sock.write("power off\n")
-      @logger.info @sock.gets.strip
-    end
-
-    def power_on
-      @sock.write("power on\n")
-      @logger.info @sock.gets.strip
-    end
-
-    def break_release
-      @sock.write("brake release\n")
-      @logger.info @sock.gets.strip
-    end
-
-    def set_operation_mode_auto
-      @sock.write("set operational mode automatic\n") #, where manual is
-      @logger.info @sock.gets.strip
-    end
-
-    def clear_operation_mode
-
-      @sock.write("clear operational mode\n") #, where manual is
-      @logger.info @sock.gets.strip
-    end
-
-    def popupmessage(message)
-      @sock.write ("popup " + message.to_s + "\n")
-      @logger.info @sock.gets.strip
-    end
-    def pause_program
-      @sock.write("pause\n")
-      @logger.info "paused program"
-      @logger.info @sock.gets.strip
     end
 
     def stop_program
       @sock.write("stop\n")
-      @logger.info "stopped program"
-      @logger.info @sock.gets.strip
+      line = @sock.gets.strip
+      if line == "Stopped"
+        @logger.info line
+        true
+      else
+        @logger.error line
+        nil
+      end
+    end
+
+    def pause_program
+      @sock.write("pause\n")
+      if line == "Pausing program"
+        @logger.info line
+        true
+      else
+        @logger.error line
+        nil
+      end
+    end
+
+    def shutdown
+      @sock.write("shutdown\n")
+      if line == "Shutting down"
+        @logger.info line
+        true
+      else
+        @logger.error line
+        nil
+      end
+    end
+
+    def running?
+      @sock.write("running\n")
+      if line == "Program running: True"
+        @logger.info line
+        true
+      else
+        @logger.error line
+        nil
+      end
     end
 
     def get_robotmode
@@ -120,22 +158,164 @@ module UR
     def get_loaded_program
       @sock.write ("get loaded program\n")
       line = @sock.gets.strip
-      @logger.info line
-      path = $1.strip if line.match(/^Loaded program:\s(.+)/)
+      if line.match(/^Loaded program:\s(.+)/)
+        @logger.info line
+        path = $1.strip
+      else
+        @logger.error line
+        nil
+      end
     end
 
-    def load_program (programname)
-      @logger.info "loadprogram"
-      send = "load " + programname + ".urp\n"
-      puts send
-      @sock.write (send)
+    def open_popupmessage(message)
+      @sock.write ("popup " + message.to_s + "\n")
+      @logger.info @sock.gets.strip
+    end
+
+    def close_popupmessage
+      @sock.write ("close popup\n")
+      @logger.info @sock.gets.strip
+    end
+
+    def add_to_log(message)
+      @sock.write ("addToLog " + message.to_s + "\n")
       line = @sock.gets.strip
-      @logger.info line
+      if line.match(/^Added log message/)
+        @logger.info line
+      else
+        @logger.error line
+      end
+    end
+
+    def is_program_saved?
+      @sock.write("isProgramSaved\n")
+      if line == "True"
+        @logger.info line
+        true
+      else
+        @logger.error line
+        nil
+      end
     end
 
     def get_program_state
-
+      @sock.write("programState\n")
+      line = @sock.gets.strip
+      @logger.info line
+      line
     end
-  end
 
+    def get_polyscope_version
+      @sock.write("PolyscopeVersion\n")
+      line = @sock.gets.strip
+      @logger.info line
+      line
+    end
+
+    def set_operation_mode_auto
+      @sock.write("set operational mode automatic\n")
+      line = @sock.gets.strip
+      if line.match(/^S/)
+        @logger.info line
+      else
+        @logger.error line
+      end
+    end
+
+    def clear_operation_mode
+      @sock.write("clear operational mode\n")
+      line = @sock.gets.strip
+      if line.match(/^operational/)
+        @logger.info line
+        true
+      else
+        @logger.error line
+      end
+    end
+
+    def power_on
+      @sock.write("power on\n")
+      if line.match(/^Powering/)
+        @logger.info line
+        true
+      else
+        @logger.error line
+        nil
+      end
+    end
+
+    def power_off
+      @sock.write("power off\n")
+      if line.match(/^Powering/)
+        @logger.info line
+        true
+      else
+        @logger.error line
+        nil
+      end
+    end
+
+    def break_release
+      @sock.write("brake release\n")
+      if line.match(/^Brake/)
+        @logger.info line
+        true
+      else
+        @logger.error line
+        nil
+      end
+    end
+
+    def get_safety_mode
+      @sock.write("safetymode\n")
+      line = @sock.gets.strip
+      @logger.info line
+      result = $1.strip if line.match(/^Safetymode:\s(.+)/)
+    end
+
+    def unlock_protective_stop
+      @sock.write("unlock protective stop\n")
+      if line.match(/^Protective/)
+        @logger.info line
+        true
+      else
+        @logger.error line
+        nil
+      end
+    end
+
+    def close_safety_popup
+      @sock.write("close safety popup\n")
+      if line.match(/^closing/)
+        @logger.info line
+        true
+      else
+        @logger.error line
+        nil
+      end
+    end
+
+    def load_installation
+      @sock.write("load installation\n")
+      if line.match(/^Loading/)
+        @logger.info line
+        true
+      else
+        @logger.error line
+        nil
+      end
+    end
+
+    def restart_safety
+      @sock.write("restart safety\n")
+      if line.match(/^Brake/)
+        @logger.info line
+        true
+      else
+        @logger.error line
+        nil
+      end
+    end
+
+  end
 end
