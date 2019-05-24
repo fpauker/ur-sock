@@ -7,17 +7,6 @@ module UR
 
   class Rtde
     PROTOCOL_VERSION = 2
-    @@robotmode = {-1 => 'No Controller',
-                  0 => 'Disconnected',
-                  1 => 'Confirm Safety',
-                  2 => 'Booting',
-                  3 => 'Power Off',
-                  4 => 'Power On',
-                  5 => 'Idle',
-                  6 => 'Backdrive',
-                  7 => 'Running',
-                  8 => 'Updating Firmware'
-                }
     ROBOTMODE = {
       -1 => 'No Controller',
        0 => 'Disconnected',
@@ -29,6 +18,37 @@ module UR
        6 => 'Backdrive',
        7 => 'Running',
        8 => 'Updating Firmware'
+    }
+    JOINTMODE = {
+      235 => 'JOINT_MODE_RESET',
+      236 => 'JOINT_MODE_SHUTTING_DOWN',
+      237 => 'JOINT_PART_D_CALIBRATION_MODE (INTERNAL USE ONLY)',
+      238 => 'JOINT_MODE_BACKDRIVE',
+      239 => 'JOINT_MODE_POWER_OFF',
+      240 => 'JOINT_MODE_READY_FOR_POWER_OFF (FROM VERSION 5.1)',
+      245 => 'JOINT_MODE_NOT_RESPONDING',
+      246 => 'JOINT_MODE_MOTOR_INITIALISATION',
+      247 => 'JOINT_MODE_BOOTING',
+      248 => 'JOINT_PART_D_CALIBRATION_ERROR_MODE (INTERNAL USE ONLY)',
+      249 => 'JOINT_MODE_BOOTLOADER',
+      250 => 'JOINT_CALIBRATION_MODE (INTERNAL USE ONLY)',
+      251 => 'JOINT_MODE_VIOLATION',
+      252 => 'JOINT_MODE_FAULT',
+      253 => 'JOINT_MODE_RUNNING',
+      255 => 'JOINT_MODE_IDLE'
+    }
+    SAFETYMODE = {
+      11 => 'SAFETY_MODE_UNDEFINED_SAFETY_MODE',
+      10 => 'SAFETY_MODE_VALIDATE_JOINT_ID',
+      9 => 'SAFETY_MODE_FAULT',
+      8 => 'SAFETY_MODE_VIOLATION',
+      7 => 'SAFETY_MODE_ROBOT_EMERGENCY_STOP',
+      6 => 'SAFETY_MODE_SYSTEM_EMERGENCY_STOP',
+      5 => 'SAFETY_MODE_SAFEGUARD_STOP',
+      4 => 'SAFETY_MODE_RECOVERY',
+      3 => 'SAFETY_MODE_PROTECTIVE_STOP',
+      2 => 'SAFETY_MODE_REDUCED',
+      1 => 'SAFETY_MODE_NORMAL'
     }
 
     module Command #{{{
@@ -48,10 +68,6 @@ module UR
       STARTED = 2
       PAUSED = 3
     end #}}}
-
-    def get_robotmode
-      @@robotmode
-    end
 
     def initialize(host, logger=Logger.new(STDOUT,level: :INFO)) #{{{
       host = '//' + host if host !~ /\/\//
