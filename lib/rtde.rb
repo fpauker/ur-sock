@@ -51,6 +51,18 @@ module UR
       1 => 'SAFETY_MODE_NORMAL'
     }
 
+    TOOLMODE = {
+      235 => 'JOINT_MODE_RESET',
+      236 => 'JOINT_MODE_SHUTTING_DOWN',
+      239 => 'JOINT_MODE_POWER_OFF',
+      245 => 'JOINT_MODE_NOT_RESPONDING',
+      247 => 'JOINT_MODE_BOOTING',
+      249 => 'JOINT_MODE_BOOTLOADER',
+      252 => 'JOINT_MODE_FAULT',
+      253 => 'JOINT_MODE_RUNNING',
+      255 => 'JOINT_MODE_IDLE'
+    }
+
     module Command #{{{
       RTDE_REQUEST_PROTOCOL_VERSION = 86        # ASCII V
       RTDE_GET_URCONTROL_VERSION = 118          # ASCII V
