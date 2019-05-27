@@ -77,13 +77,13 @@ module UR
     end
 
     def load_program (programname)
-      @logger.info "loadprogram"
+      @logger.debug "loadprogram"
       send = "load " + programname + ".urp\n"
       puts send
       @sock.write (send)
       line = @sock.gets.strip
       if line.match(/^./) == 'L'
-        @logger.info line
+        @logger.debug line
         true
       else
         @logger.error line
@@ -95,7 +95,7 @@ module UR
       @sock.write("play\n")
       line = @sock.gets.strip
       if line == "Starting program"
-        @logger.info line
+        @logger.debug line
         true
       else
         @logger.error line
@@ -107,7 +107,7 @@ module UR
       @sock.write("stop\n")
       line = @sock.gets.strip
       if line == "Stopped"
-        @logger.info line
+        @logger.debug line
         true
       else
         @logger.error line
@@ -118,7 +118,7 @@ module UR
     def pause_program
       @sock.write("pause\n")
       if line == "Pausing program"
-        @logger.info line
+        @logger.debug line
         true
       else
         @logger.error line
@@ -129,7 +129,7 @@ module UR
     def shutdown
       @sock.write("shutdown\n")
       if line == "Shutting down"
-        @logger.info line
+        @logger.debug line
         true
       else
         @logger.error line
@@ -140,7 +140,7 @@ module UR
     def running?
       @sock.write("running\n")
       if line == "Program running: True"
-        @logger.info line
+        @logger.debug line
         true
       else
         @logger.error line
@@ -151,7 +151,7 @@ module UR
     def get_robotmode
       @sock.write("robotmode\n")
       line = @sock.gets.strip
-      @logger.info line
+      @logger.debug line
       result = $1.strip if line.match(/^Robotmode:\s(.+)/)
     end
 
@@ -159,7 +159,7 @@ module UR
       @sock.write ("get loaded program\n")
       line = @sock.gets.strip
       if line.match(/^Loaded program:\s(.+)/)
-        @logger.info line
+        @logger.debug line
         path = $1.strip
       else
         @logger.error line
@@ -169,19 +169,19 @@ module UR
 
     def open_popupmessage(message)
       @sock.write ("popup " + message.to_s + "\n")
-      @logger.info @sock.gets.strip
+      @logger.debug @sock.gets.strip
     end
 
     def close_popupmessage
       @sock.write ("close popup\n")
-      @logger.info @sock.gets.strip
+      @logger.debug @sock.gets.strip
     end
 
     def add_to_log(message)
       @sock.write ("addToLog " + message.to_s + "\n")
       line = @sock.gets.strip
       if line.match(/^Added log message/)
-        @logger.info line
+        @logger.debug line
       else
         @logger.error line
       end
@@ -190,7 +190,7 @@ module UR
     def is_program_saved?
       @sock.write("isProgramSaved\n")
       if line == "True"
-        @logger.info line
+        @logger.debug line
         true
       else
         @logger.error line
@@ -201,14 +201,14 @@ module UR
     def get_program_state
       @sock.write("programState\n")
       line = @sock.gets.strip
-      @logger.info line
+      @logger.debug line
       line
     end
 
     def get_polyscope_version
       @sock.write("PolyscopeVersion\n")
       line = @sock.gets.strip
-      @logger.info line
+      @logger.debug line
       line
     end
 
@@ -216,7 +216,7 @@ module UR
       @sock.write("set operational mode automatic\n")
       line = @sock.gets.strip
       if line.match(/^S/)
-        @logger.info line
+        @logger.debug line
       else
         @logger.error line
       end
@@ -226,7 +226,7 @@ module UR
       @sock.write("clear operational mode\n")
       line = @sock.gets.strip
       if line.match(/^operational/)
-        @logger.info line
+        @logger.debug line
         true
       else
         @logger.error line
@@ -236,7 +236,7 @@ module UR
     def power_on
       @sock.write("power on\n")
       if line.match(/^Powering/)
-        @logger.info line
+        @logger.debug line
         true
       else
         @logger.error line
@@ -247,7 +247,7 @@ module UR
     def power_off
       @sock.write("power off\n")
       if line.match(/^Powering/)
-        @logger.info line
+        @logger.debug line
         true
       else
         @logger.error line
@@ -258,7 +258,7 @@ module UR
     def break_release
       @sock.write("brake release\n")
       if line.match(/^Brake/)
-        @logger.info line
+        @logger.debug line
         true
       else
         @logger.error line
@@ -269,14 +269,14 @@ module UR
     def get_safety_mode
       @sock.write("safetymode\n")
       line = @sock.gets.strip
-      @logger.info line
+      @logger.debug line
       result = $1.strip if line.match(/^Safetymode:\s(.+)/)
     end
 
     def unlock_protective_stop
       @sock.write("unlock protective stop\n")
       if line.match(/^Protective/)
-        @logger.info line
+        @logger.debug line
         true
       else
         @logger.error line
@@ -287,7 +287,7 @@ module UR
     def close_safety_popup
       @sock.write("close safety popup\n")
       if line.match(/^closing/)
-        @logger.info line
+        @logger.debug line
         true
       else
         @logger.error line
@@ -298,7 +298,7 @@ module UR
     def load_installation
       @sock.write("load installation\n")
       if line.match(/^Loading/)
-        @logger.info line
+        @logger.debug line
         true
       else
         @logger.error line
@@ -309,7 +309,7 @@ module UR
     def restart_safety
       @sock.write("restart safety\n")
       if line.match(/^Brake/)
-        @logger.info line
+        @logger.debug line
         true
       else
         @logger.error line
