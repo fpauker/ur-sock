@@ -19,6 +19,11 @@ module UR
        7 => 'Running',
        8 => 'Updating Firmware'
     }
+    PROGRAMSTATE = {
+      1 => 'Stopped',
+      2 => 'Playing',
+      4 => 'Paused'
+    }
     JOINTMODE = {
       235 => 'JOINT_MODE_RESET',
       236 => 'JOINT_MODE_SHUTTING_DOWN',
