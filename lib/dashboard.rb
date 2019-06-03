@@ -117,6 +117,7 @@ module UR
 
     def pause_program
       @sock.write("pause\n")
+      line = @sock.gets.strip
       if line == "Pausing program"
         @logger.debug line
         true
@@ -128,6 +129,7 @@ module UR
 
     def shutdown
       @sock.write("shutdown\n")
+      line = @sock.gets.strip
       if line == "Shutting down"
         @logger.debug line
         true
@@ -139,6 +141,7 @@ module UR
 
     def running?
       @sock.write("running\n")
+      line = @sock.gets.strip
       if line == "Program running: True"
         @logger.debug line
         true
@@ -189,6 +192,7 @@ module UR
 
     def is_program_saved?
       @sock.write("isProgramSaved\n")
+      line = @sock.gets.strip
       if line == "True"
         @logger.debug line
         true
@@ -235,6 +239,7 @@ module UR
 
     def power_on
       @sock.write("power on\n")
+      line = @sock.gets.strip
       if line.match(/^Powering/)
         @logger.debug line
         true
@@ -246,6 +251,7 @@ module UR
 
     def power_off
       @sock.write("power off\n")
+      line = @sock.gets.strip
       if line.match(/^Powering/)
         @logger.debug line
         true
@@ -257,6 +263,7 @@ module UR
 
     def break_release
       @sock.write("brake release\n")
+      line = @sock.gets.strip
       if line.match(/^Brake/)
         @logger.debug line
         true
@@ -275,6 +282,7 @@ module UR
 
     def unlock_protective_stop
       @sock.write("unlock protective stop\n")
+      line = @sock.gets.strip
       if line.match(/^Protective/)
         @logger.debug line
         true
@@ -286,6 +294,7 @@ module UR
 
     def close_safety_popup
       @sock.write("close safety popup\n")
+      line = @sock.gets.strip
       if line.match(/^closing/)
         @logger.debug line
         true
@@ -297,6 +306,7 @@ module UR
 
     def load_installation
       @sock.write("load installation\n")
+      line = @sock.gets.strip
       if line.match(/^Loading/)
         @logger.debug line
         true
@@ -308,6 +318,7 @@ module UR
 
     def restart_safety
       @sock.write("restart safety\n")
+      line = @sock.gets.strip
       if line.match(/^Brake/)
         @logger.debug line
         true
