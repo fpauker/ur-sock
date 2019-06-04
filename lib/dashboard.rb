@@ -216,6 +216,16 @@ module UR
       line
     end
 
+    def set_operation_mode_manual
+      @sock.write("set operational mode manual\n")
+      line = @sock.gets.strip
+      if line.match(/^S/)
+        @logger.debug line
+      else
+        @logger.error line
+      end
+    end
+
     def set_operation_mode_auto
       @sock.write("set operational mode automatic\n")
       line = @sock.gets.strip
