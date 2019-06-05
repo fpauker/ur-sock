@@ -167,7 +167,8 @@ module UR
 
     def get_loaded_program
       @sock.write ("get loaded program\n")
-      line = @sock.readpartial(1024).strip
+      line = @sock.readpartial(1024)
+      line.strip if line.to_s != 'eof'
       if line.match(/^Loaded program:\s(.+)/)
         @logger.debug line
         path = $1.strip
@@ -211,7 +212,8 @@ module UR
 
     def get_program_state
       @sock.write("programState\n")
-      line = @sock.readpartial(1024).strip
+      line = @sock.readpartial(1024)
+      line.strip if line.to_s != 'eof'
       @logger.debug line
       line
     end

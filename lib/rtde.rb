@@ -109,7 +109,7 @@ module UR
         @conn_state = ConnectionState::CONNECTED
       rescue
         @sock = nil
-        raise
+        #raise "RTDE connection error"
       end
       if not negotiate_protocol_version
         raise RuntimeError.new 'Unable to negotiate protocol version'
