@@ -213,9 +213,13 @@ module UR
     def get_program_state
       @sock.write("programState\n")
       line = @sock.readpartial(1024)
-      line.strip if line.to_s != 'eof'
-      @logger.debug line
-      line
+      if line.to_s != 'eof'
+        line.strip
+        @logger.debug line
+        line
+      else
+        nil
+      end
     end
 
     def get_polyscope_version
