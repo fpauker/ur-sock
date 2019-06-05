@@ -2,6 +2,7 @@
 require 'socket'        # Sockets are in standard library
 require 'logger'
 require 'uri'
+require 'socketry'
 
 module UR
 
@@ -55,16 +56,22 @@ module UR
 
     def connect
       return if @sock
-      @sock = Socket.new Socket::AF_INET, Socket::SOCK_STREAM
-      @sock.setsockopt Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1
-      @sock = TCPSocket.new(@hostname, @port)
+      #@sock = Socket.new Socket::AF_INET, Socket::SOCK_STREAM
+      #@sock.setsockopt Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1
+      #@sock = TCPSocket.new(@hostname, @port)
+      @sock = Socketry::TCP::Socket.connect(@hostname, @port)
+      p @sock.read_timeout
       @conn_state = ConnectionState::CONNECTED
-      @logger.info @sock.gets.strip
+      @logger.info @sock.readpartial(1024).strip
       self
     end
 
     def connected?
       @conn_state != ConnectionState::DISCONNECTED
+    end
+
+    def reconnect
+
     end
 
     def disconnect
@@ -160,7 +167,7 @@ module UR
 
     def get_loaded_program
       @sock.write ("get loaded program\n")
-      line = @sock.gets.strip
+      line = @sock.readpartial(1024).strip
       if line.match(/^Loaded program:\s(.+)/)
         @logger.debug line
         path = $1.strip
@@ -204,7 +211,7 @@ module UR
 
     def get_program_state
       @sock.write("programState\n")
-      line = @sock.gets.strip
+      line = @sock.readpartial(1024).strip
       @logger.debug line
       line
     end
