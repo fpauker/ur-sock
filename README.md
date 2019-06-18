@@ -79,7 +79,7 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 * **Florian Pauker**
 * **Jürgen Mangler**
 
-See also the list of [contributors](https://intra.acdp.at/gogs/fpauker/ua4ur/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/fpauker/ua4ur/contributors) who participated in this project.
 
 ## License
 
