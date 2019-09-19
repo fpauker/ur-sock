@@ -166,7 +166,7 @@ module UR
         path = $1.strip
       else
         @logger.error line
-        raise 'Loaded program can not be got? Dashboard server down.'
+        raise 'Loaded program can not be got. Dashboard server down or not in Remote Mode'
         nil
       end
     end
@@ -199,6 +199,7 @@ module UR
         true
       else
         @logger.error line
+        raise 'Is program saved can not be executed. Dashboard server down or not in Remote Mode'
         nil
       end
     end
@@ -224,6 +225,7 @@ module UR
         @logger.debug line
       else
         @logger.error line
+        raise 'Cant set operation mode manual. DDashboard server down or not in Remote Mode'
       end
     end
 
@@ -234,6 +236,7 @@ module UR
         @logger.debug line
       else
         @logger.error line
+        raise 'Cant set operation mode automatic. Dashboard server down or not in Remote Mode'
       end
     end
 
@@ -245,6 +248,7 @@ module UR
         true
       else
         @logger.error line
+        raise 'Cant clear operation mode. Dashboard server down or not in Remote Mode'
       end
     end
 
@@ -256,6 +260,7 @@ module UR
         true
       else
         @logger.error line
+        raise 'Cant power on. Dashboard server down or not in Remote Mode'
         nil
       end
     end
@@ -268,6 +273,7 @@ module UR
         true
       else
         @logger.error line
+        raise 'Cant power off. Dashboard server down or not in Remote Mode'
         nil
       end
     end
@@ -280,6 +286,7 @@ module UR
         true
       else
         @logger.error line
+        raise 'Cant release breaks. Dashboard server down or not in Remote Mode'
         nil
       end
     end
@@ -299,6 +306,7 @@ module UR
         true
       else
         @logger.error line
+        raise 'Cant unlock protective stop. Dashboard server down or not in Remote Mode'
         nil
       end
     end
@@ -311,6 +319,7 @@ module UR
         true
       else
         @logger.error line
+        raise 'Cant close safety popup. Dashboard server down or not in Remote Mode'
         nil
       end
     end
@@ -323,6 +332,7 @@ module UR
         true
       else
         @logger.error line
+        raise 'Cant load installation. Dashboard server down or not in Remote Mode'
         nil
       end
     end
@@ -335,6 +345,7 @@ module UR
         true
       else
         @logger.error line
+        raise 'Cant restart safety. Dashboard server down or not in Remote Mode'
         nil
       end
     end

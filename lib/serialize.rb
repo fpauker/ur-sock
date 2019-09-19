@@ -152,9 +152,9 @@ module UR
           elsif i == 'UINT8'
             rmd.fmt += 'C'
           elsif i == 'IN_USE'
-            raise TypeError 'An input parameter is already in use.'
+            #raise TypeError 'An input parameter is already in use.'
           else
-            raise TypeError 'Unknown data type: ' + i
+            #raise TypeError 'Unknown data type: ' + i
           end
         end
         rmd
