@@ -166,6 +166,7 @@ module UR
         path = $1.strip
       else
         @logger.error line
+        raise 'Loaded program can not be got? Dashboard server down.'
         nil
       end
     end
