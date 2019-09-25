@@ -64,6 +64,8 @@ module UR
         data[offset...offset+size].map(&:to_i)
       elsif data_type == 'INT32' or data_type == 'UINT8'
         data[offset].to_i
+      elsif data_type == 'BOOL'
+        data[offset].to_b #TODO Check if this is ok
       else
         raise TypeError.new('unpack_field: unknown data type: ' + data_type)
       end
