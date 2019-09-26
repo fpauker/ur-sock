@@ -17,11 +17,11 @@ if not con.send_start
 end
 
 ### Set Speed to very slow
-# speed_names, speed_types = conf.get_recipe('speed')
-# speed = con.send_input_setup(speed_names, speed_types)
-# speed["speed_slider_mask"] = 1
-# speed["speed_slider_fraction"] = 0
-# con.send(speed)
+speed_names, speed_types = conf.get_recipe('speed')
+speed = con.send_input_setup(speed_names, speed_types)
+speed["speed_slider_mask"] = 1
+speed["speed_slider_fraction"] = 0
+con.send(speed)
 
 begin
   while true

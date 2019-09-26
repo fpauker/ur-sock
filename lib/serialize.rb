@@ -133,7 +133,6 @@ module UR
         rmd.id = buf.unpack('C')[0]
         rmd.types = buf[1..-1].split(',')
         rmd.fmt = 'C'
-        #p rmd.types
         rmd.types.each do |i|
           if i == 'INT32'
             rmd.fmt += 'i>'
