@@ -6,7 +6,7 @@ require 'uri'
 module UR
 
   class Dash
-    class Error < Exception; end
+    class Reconnect < Exception; end
 
     module ConnectionState
       DISCONNECTED = 'DISCONNECTED'
@@ -81,15 +81,14 @@ module UR
     def load_program (programname)
       @logger.debug "loadprogram"
       send = "load " + programname + ".urp\n"
-      puts send
-      @sock.write (send)
+      @sock.write send
       line = @sock.gets.strip
-      if line.match(/^./) == 'L'
+      if line.match(/^L/)
         @logger.debug line
         true
       else
         @logger.error line
-        nil
+        raise UR::Dash::Reconnect.new('Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -101,7 +100,7 @@ module UR
         true
       else
         @logger.error line
-        nil
+        raise UR::Dash::Reconnect.new('Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -113,7 +112,7 @@ module UR
         true
       else
         @logger.error line
-        nil
+        raise UR::Dash::Reconnect.new('Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -125,7 +124,7 @@ module UR
         true
       else
         @logger.error line
-        nil
+        raise UR::Dash::Reconnect.new('Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -137,7 +136,7 @@ module UR
         true
       else
         @logger.error line
-        nil
+        raise UR::Dash::Reconnect.new('Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -149,7 +148,7 @@ module UR
         true
       else
         @logger.error line
-        nil
+        raise UR::Dash::Reconnect.new('Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -161,14 +160,18 @@ module UR
     end
 
     def get_loaded_program
-      @sock.write ("get loaded program\n")
-      line = @sock.gets.strip
+      begin
+        @sock.write ("get loaded program\n")
+        line = @sock.gets.strip
+      rescue
+        raise UR::Dash::Reconnect.new('Loaded program can not be got. Dashboard server down or not in Remote Mode')
+      end  
       if line.match(/^Loaded program:\s(.+)/)
         @logger.debug line
         path = $1.strip
       else
         @logger.error line
-        raise UR::Dash::Error.new('Loaded program can not be got. Dashboard server down or not in Remote Mode')
+        raise UR::Dash::Reconnect.new('Loaded program can not be got. Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -189,6 +192,7 @@ module UR
         @logger.debug line
       else
         @logger.error line
+        raise UR::Dash::Reconnect.new('Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -200,7 +204,7 @@ module UR
         true
       else
         @logger.error line
-        raise UR::Dash::Error.new('Cant determine if program is saved. Dashboard server down or not in Remote Mode')
+        raise UR::Dash::Reconnect.new('Cant determine if program is saved. Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -225,7 +229,7 @@ module UR
         @logger.debug line
       else
         @logger.error line
-        raise UR::Dash::Error.new('Cant set operation mode manual. DDashboard server down or not in Remote Mode')
+        raise UR::Dash::Reconnect.new('Cant set operation mode manual. DDashboard server down or not in Remote Mode')
       end
     end
 
@@ -236,7 +240,7 @@ module UR
         @logger.debug line
       else
         @logger.error line
-        raise UR::Dash::Error.new('Cant set operation mode automatic. Dashboard server down or not in Remote Mode')
+        raise UR::Dash::Reconnect.new('Cant set operation mode automatic. Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -248,7 +252,7 @@ module UR
         true
       else
         @logger.error line
-        raise UR::Dash::Error.new('Cant clear operation mode. Dashboard server down or not in Remote Mode')
+        raise UR::Dash::Reconnect.new('Cant clear operation mode. Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -260,7 +264,7 @@ module UR
         true
       else
         @logger.error line
-        raise UR::Dash::Error.new('Cant power on. Dashboard server down or not in Remote Mode')
+        raise UR::Dash::Reconnect.new('Cant power on. Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -272,7 +276,7 @@ module UR
         true
       else
         @logger.error line
-        raise UR::Dash::Error.new('Cant power off. Dashboard server down or not in Remote Mode')
+        raise UR::Dash::Reconnect.new('Cant power off. Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -284,7 +288,7 @@ module UR
         true
       else
         @logger.error line
-        raise UR::Dash::Error.new('Cant release breaks. Dashboard server down or not in Remote Mode')
+        raise UR::Dash::Reconnect.new('Cant release breaks. Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -303,7 +307,7 @@ module UR
         true
       else
         @logger.error line
-        raise UR::Dash::Error.new('Cant unlock protective stop. Dashboard server down or not in Remote Mode')
+        raise UR::Dash::Reconnect.new('Cant unlock protective stop. Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -315,7 +319,7 @@ module UR
         true
       else
         @logger.error line
-        raise UR::Dash::Error.new('Cant close safety popup. Dashboard server down or not in Remote Mode')
+        raise UR::Dash::Reconnect.new('Cant close safety popup. Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -327,7 +331,7 @@ module UR
         true
       else
         @logger.error line
-        raise UR::Dash::Error.new('Cant load installation. Dashboard server down or not in Remote Mode')
+        raise UR::Dash::Reconnect.new('Cant load installation. Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -339,7 +343,7 @@ module UR
         true
       else
         @logger.error line
-        raise UR::Dash::Error.new('Cant restart safety. Dashboard server down or not in Remote Mode')
+        raise UR::Dash::Reconnect.new('Cant restart safety. Dashboard server down or not in Remote Mode')
       end
     end
 
