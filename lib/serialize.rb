@@ -64,6 +64,8 @@ module UR
         data[offset...offset+size].map(&:to_i)
       elsif data_type == 'INT32' or data_type == 'UINT8'
         data[offset].to_i
+      elsif data_type == 'BOOL'
+        data[offset].to_i > 0 ? true : false
       else
         raise TypeError.new('unpack_field: unknown data type: ' + data_type)
       end
@@ -151,6 +153,8 @@ module UR
             rmd.fmt += 'Q>'
           elsif i == 'UINT8'
             rmd.fmt += 'C'
+          elsif i == 'BOOL'
+            rmd.fmt += '?'
           elsif i == 'IN_USE'
             #raise TypeError 'An input parameter is already in use.'
           else

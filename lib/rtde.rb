@@ -101,7 +101,7 @@ module UR
     def connect #{{{
       return if @sock
 
-      @buf = '' # buffer data in binary format
+      @buf = ''.b # buffer data in binary format
       begin
         @sock = Socket.new Socket::AF_INET, Socket::SOCK_STREAM
         @sock.setsockopt Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1
@@ -159,18 +159,18 @@ module UR
         @logger.error 'Cannot send when RTDE synchroinization is inactive'
         return
       end
-      if not @input_config.key?(input_data.recipe_id)
+      if not @input_config.include? input_data.recipe_id
         @logger.error 'Input configuration id not found: ' + @input_data.recipe_id
         return
       end
       config = @input_config[input_data.recipe_id]
       send_all Command::RTDE_DATA_PACKAGE, config.pack(input_data)
     end #}}}
-    def send_and_receive(cmd, payload = '') #{{{
+    def send_and_receive(cmd, payload = ''.b) #{{{
       @logger.debug 'Start send_and_receive'
       send_all(cmd, payload) ? recv(cmd) : nil
     end #}}}
-    def send_all(command, payload = '') #{{{
+    def send_all(command, payload = ''.b) #{{{
       fmt = 'S>C'
       size = ([0,0].pack fmt).length + payload.length
       buf = [size, command].pack(fmt) + payload
@@ -261,16 +261,16 @@ module UR
       return true
     end #}}}
 
-    def receive #{{{
+    def receive(binary=false) #{{{
       @logger.debug 'Start receive'
       if !@output_config
         @logger.error 'Output configuration not initialized'
         nil
       end
       return nil if @conn_state != ConnectionState::STARTED
-      recv Command::RTDE_DATA_PACKAGE
+      recv Command::RTDE_DATA_PACKAGE, binary
     end #}}}
-    def recv(command) #{{{
+    def recv(command, binary=false) #{{{
       @logger.debug 'Start recv' + @buf.to_s
       while connected?
         readable, _, xlist = IO.select([@sock], [], [@sock])
@@ -311,7 +311,7 @@ module UR
             end
             if packet_header.command == command
               @logger.debug 'returning becuase of packet_header.command == command'
-              return data
+              return  binary ? packet[1..-1] : data
             else
               @logger.info 'skipping package(2)'
             end
