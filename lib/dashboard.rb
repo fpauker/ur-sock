@@ -165,12 +165,13 @@ module UR
         line = @sock.gets.strip
       rescue
         raise UR::Dash::Reconnect.new('Loaded program can not be got. Dashboard server down or not in Remote Mode')
-      end  
+      end
+      @logger.debug line
       if line.match(/^Loaded program:\s(.+)/)
-        @logger.debug line
-        path = $1.strip
+        $1.strip
+      elsif line.match(/^No program loaded/)
+        nil
       else
-        @logger.error line
         raise UR::Dash::Reconnect.new('Loaded program can not be got. Dashboard server down or not in Remote Mode')
       end
     end
