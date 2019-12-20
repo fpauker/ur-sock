@@ -2,6 +2,11 @@
 
 Universal robot interface implementation in ruby. This library provides functions using different interfaces of the universal robot. Primary this was designed for the new e-series.
 
+## Requirements
+
+This software requires URControl version newer than 5.1.
+Latest supported URControl vresion: 5.5
+
 ## Getting Started
 
 This library uses 3 interfaces of the universal robot:
