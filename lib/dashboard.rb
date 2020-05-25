@@ -348,5 +348,36 @@ module UR
       end
     end
 
+    def get_operational_mode
+      @sock.write("get operational mode\n")
+      line = @sock.gets.strip
+      if line != "NONE"
+        @logger.debug line
+        line
+      else
+        @logger.error line
+        raise UR::Dash::Reconnect.new('No password set, so no modes available')
+      end
+    end
+
+    def is_in_remote_control
+      @sock.write("is in remote control\n")
+      line = @sock.gets.strip
+      @logger.debug line
+      line
+    end
+
+    def get_serial_number
+      @sock.write("get serial number\n")
+      line = @sock.gets.strip
+      @logger.debug line
+      line
+    end
+    def get_robot_model
+      @sock.write("get robot model\n")
+      line = @sock.gets.strip
+      @logger.debug line
+      line
+    end
   end
 end
