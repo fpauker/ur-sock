@@ -1,10 +1,9 @@
 <?xml version="1.0"?>
 <rtde_config>
   <recipe key="speed">
-		<field name="speed_slider_mask" type="UINT32"/>
-		<field name="speed_slider_fraction" type="DOUBLE"/>
-	</recipe>
-
+    <field name="speed_slider_mask" type="UINT32"/>
+    <field name="speed_slider_fraction" type="DOUBLE"/>
+  </recipe>
   <recipe key="out">
     <field name="timestamp" type="DOUBLE"/>
     <field name="target_q" type="VECTOR6D"/>

@@ -5,7 +5,7 @@ require 'uri'
 
 module UR
 
-  class Transfer
+  class Psi
     module ConnectionState
       DISCONNECTED = 0
       CONNECTED = 1

@@ -64,6 +64,8 @@ module UR
         data[offset...offset+size].map(&:to_i)
       elsif data_type == 'INT32' or data_type == 'UINT8'
         data[offset].to_i
+      elsif data_type == 'BOOL'
+        data[offset].to_i > 0 ? true : false
       else
         raise TypeError.new('unpack_field: unknown data type: ' + data_type)
       end
@@ -95,19 +97,10 @@ module UR
         obj = DataObject.new
         offset = 0
         obj.recipe_id = data[0]
-
-        #puts "Datat:" + data.to_s
-
         names.each_with_index do |name,i|
-          #obj.values[i] = data[1..-1].unpack('x' * offset + types[i])
-          #puts unpack_field(data[1..-1], offset, types[i])
-
           obj.values[name] = Serialize.unpack_field(data[1..-1], offset, types[i])
-          #puts "obj"
-          #puts obj.values[i]
           offset += Serialize::get_item_size(types[i])
         end
-        #puts "obj:" + obj.values.to_s
         obj
       end
 
@@ -140,7 +133,6 @@ module UR
         rmd.id = buf.unpack('C')[0]
         rmd.types = buf[1..-1].split(',')
         rmd.fmt = 'C'
-        p rmd.types
         rmd.types.each do |i|
           if i == 'INT32'
             rmd.fmt += 'i>'
@@ -160,20 +152,19 @@ module UR
             rmd.fmt += 'Q>'
           elsif i == 'UINT8'
             rmd.fmt += 'C'
+          elsif i == 'BOOL'
+            rmd.fmt += '?'
           elsif i == 'IN_USE'
-            raise TypeError 'An input parameter is already in use.'
+            #raise TypeError 'An input parameter is already in use.'
           else
-            raise TypeError 'Unknown data type: ' + i
+            #raise TypeError 'Unknown data type: ' + i
           end
         end
         rmd
       end
 
       def pack(state)
-        p state.class
         l = state.pack(self.names, self.types)
-        p l
-        p self.fmt
         l.pack(self.fmt)
       end
 

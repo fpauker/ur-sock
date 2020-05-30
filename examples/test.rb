@@ -5,7 +5,7 @@ require_relative '../lib/ur-sock'
 conf = UR::XMLConfigFile.new "test.conf.xml"
 output_names, output_types = conf.get_recipe('out')
 
-con     = UR::Rtde.new('localhost').connect
+con     = UR::Rtde.new('10.0.31.22').connect
 version = con.controller_version
 
 ### Setup output
@@ -17,16 +17,17 @@ if not con.send_start
 end
 
 ### Set Speed to very slow
-# speed_names, speed_types = conf.get_recipe('speed')
-# speed = con.send_input_setup(speed_names, speed_types)
-# speed["speed_slider_mask"] = 1
-# speed["speed_slider_fraction"] = 0
-# con.send(speed)
+speed_names, speed_types = conf.get_recipe('speed')
+speed = con.send_input_setup(speed_names, speed_types)
+speed["speed_slider_mask"] = 1
+speed["speed_slider_fraction"] = 0
+con.send(speed)
 
 begin
   while true
     data = con.receive
     if data
+      puts UR::Rtde::ROBOTMODE[data['robot_mode']]
       puts data["timestamp"].round.to_s + "\t" + data["actual_TCP_pose"].to_s
     end
   end
