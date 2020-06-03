@@ -230,7 +230,7 @@ module UR
         @logger.debug line
       else
         @logger.error line
-        raise UR::Dash::Reconnect.new('Cant set operation mode manual. DDashboard server down or not in Remote Mode')
+        raise UR::Dash::Reconnect.new('Cant set operation mode manual. Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -355,8 +355,7 @@ module UR
         @logger.debug line
         line
       else
-        @logger.error line
-        raise UR::Dash::Reconnect.new('No password set, so no modes available')
+        @logger.warn'No password set, so no modes available'
       end
     end
 
