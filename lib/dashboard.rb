@@ -342,6 +342,9 @@ module UR
       if line.match(/^Brake/)
         @logger.debug line
         true
+      elsif line.match(/^could not understand/)
+        @logger.warn'Wrong Polyscope Version: Please upgrade to current version'
+        line
       else
         @logger.error line
         raise UR::Dash::Reconnect.new('Cant restart safety. Dashboard server down or not in Remote Mode')
@@ -351,32 +354,51 @@ module UR
     def get_operational_mode
       @sock.write("get operational mode\n")
       line = @sock.gets.strip
-      if line != "NONE"
+      if line == "MANUAL" || line == "AUTOMATIC"
         @logger.debug line
         line
+      elsif line == "NONE"
+        @logger.warn'No password set, so no modes variable is available'
+      elsif line.match(/^could not understand/)
+        @logger.warn'Wrong Polyscope Version: Please upgrade to current version'
+        line
       else
-        @logger.warn'No password set, so no modes available'
+        @logger.error line
+        raise UR::Dash::Reconnect.new('Cant restart safety. Dashboard server down or not in Remote Mode')
       end
     end
 
     def is_in_remote_control
       @sock.write("is in remote control\n")
       line = @sock.gets.strip
-      @logger.debug line
-      line
+      if line.match(/^could not understand/)
+        @logger.warn'Wrong Polyscope Version: Please upgrade to current version'
+        line
+      else
+        @logger.debug line
+        line
     end
 
     def get_serial_number
       @sock.write("get serial number\n")
       line = @sock.gets.strip
-      @logger.debug line
-      line
+      if line.match(/^could not understand/)
+        @logger.warn'Wrong Polyscope Version: Please upgrade to current version'
+        line
+      else
+        @logger.debug line
+        line
     end
+
     def get_robot_model
       @sock.write("get robot model\n")
       line = @sock.gets.strip
-      @logger.debug line
-      line
+      if line.match(/^could not understand/)
+        @logger.warn'Wrong Polyscope Version: Please upgrade to current version'
+        line
+      else
+        @logger.debug line
+        line
     end
   end
 end
