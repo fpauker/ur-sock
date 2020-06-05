@@ -344,7 +344,7 @@ module UR
         true
       elsif line.match(/^could not understand/)
         @logger.warn'Could not execute restart_safety: Please upgrade to current version'
-        line
+        nil
       else
         @logger.error line
         raise UR::Dash::Reconnect.new('Cant restart safety. Dashboard server down or not in Remote Mode')
@@ -359,12 +359,13 @@ module UR
         line
       elsif line == "NONE"
         @logger.warn'No password set, so no modes variable is available'
+        nil
       elsif line.match(/^could not understand/)
         @logger.warn'Could not execute get_operational_mode: Please upgrade to current version'
-        line
+        nil
       else
         @logger.error line
-        raise UR::Dash::Reconnect.new('Cant restart safety. Dashboard server down or not in Remote Mode')
+        raise UR::Dash::Reconnect.new('Cant get operational mode. Dashboard server down or not in Remote Mode')
       end
     end
 
@@ -373,10 +374,13 @@ module UR
       line = @sock.gets.strip
       if line.match(/^could not understand/)
         @logger.warn'Could not execute is_in_remote_control: Please upgrade to current version'
-        line
-      else
+        nil
+      elsif line == 'true' || line == 'false'
         @logger.debug line
         line
+      else
+        @logger.error line
+        raise UR::Dash::Reconnect.new('Cant determine if robot is in remote control mode. Dashboard server down maybe down')
       end
     end
 
@@ -385,10 +389,13 @@ module UR
       line = @sock.gets.strip
       if line.match(/^could not understand/)
         @logger.warn'Could not execute get_serial_number: Please upgrade to current version'
-        line
-      else
+        nil
+      elsif line.match(/^\d+$/)
         @logger.debug line
         line
+      else
+        @logger.error line
+        raise UR::Dash::Reconnect.new('Cant get serial number. Dashboard server down maybe down or not in Remote Mode')
       end
     end
 
@@ -397,10 +404,13 @@ module UR
       line = @sock.gets.strip
       if line.match(/^could not understand/)
         @logger.warn'Could not execute get_robot_model: Please upgrade to current version'
-        line
-      else
+        nil
+      elsif line.match(/^UR/)
         @logger.debug line
         line
+      else
+        @logger.error line
+        raise UR::Dash::Reconnect.new('Cant get robot model. Dashboard server down maybe down or not in Remote Mode')
       end
     end
   end
