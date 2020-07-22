@@ -45,14 +45,16 @@ module UR
       end
     end
 
-    def transfer(filename)
+    def execute_ur_script(filename)
+      @logger.info "Executing UR Scrpt File: " + filename
       File.open(filename) do |file|
         while not file.eof?
           @sock.write(file.read(1024))
+          line = @sock.gets.strip
+          @logger.debug line
         end
       end
     end
-
   end
 
 end
