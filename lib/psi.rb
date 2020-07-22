@@ -49,7 +49,7 @@ module UR
       @logger.info "Executing UR Scrpt File: " + filename
       File.open(filename) do |file|
         while not file.eof?
-          @sock.write(file.read(1024))
+          @sock.write(file.readline)
           line = @sock.gets.strip
           @logger.debug line
         end
