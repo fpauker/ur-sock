@@ -41,12 +41,12 @@ module UR
         @sock.close
         @sock = nil
         @conn_state = ConnectionState::DISCONNECTED
-        @logger.info "Connection closed " + @hostname + ":" + @port.to_s
+        @logger.info 'Connection closed ' + @hostname + ':' + @port.to_s
       end
     end
 
-    def execute_ur_script(filename)
-      @logger.info "Executing UR Scrpt File: " + filename
+    def execute_ur_script_file(filename)
+      @logger.info 'Executing UR Script File: ' + filename
       File.open(filename) do |file|
         while not file.eof?
           @sock.write(file.readline)
@@ -54,6 +54,13 @@ module UR
           @logger.debug line
         end
       end
+    end
+
+    def execute_ur_script(str)
+      @logger.info 'Executing UR Script ...'
+      @sock.write(str)
+      line = @sock.gets.strip
+      @logger.debug line
     end
   end
 
