@@ -6,6 +6,8 @@ require 'uri'
 module UR
 
   class Psi
+    class Reconnect < Exception; end
+
     module ConnectionState
       DISCONNECTED = 0
       CONNECTED = 1
@@ -47,20 +49,28 @@ module UR
 
     def execute_ur_script_file(filename)
       @logger.info 'Executing UR Script File: ' + filename
-      File.open(filename) do |file|
-        while not file.eof?
-          @sock.write(file.readline)
-          line = @sock.gets.strip
-          @logger.debug line
+      begin
+        File.open(filename) do |file|
+          while not file.eof?
+            @sock.write(file.readline)
+            line = @sock.gets.strip
+            @logger.debug line
+          end
         end
+      rescue => e
+        raise UR::Psi::Reconnect.new('UR Script can not be got. PSI server down or not in Remote Mode')
       end
     end
 
     def execute_ur_script(str)
       @logger.info 'Executing UR Script ...'
-      @sock.write(str)
-      line = @sock.gets.strip
-      @logger.debug line
+      begin
+        @sock.write(str)
+        line = @sock.gets.strip
+        @logger.debug line
+      rescue => e
+        raise UR::Psi::Reconnect.new('UR Script can not be got. PSI server down or not in Remote Mode')
+      end
     end
   end
 
