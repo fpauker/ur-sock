@@ -377,7 +377,7 @@ module UR
         nil
       elsif line == 'true' || line == 'false'
         @logger.debug line
-        line
+        line == 'true'
       else
         @logger.error line
         raise UR::Dash::Reconnect.new('Cant determine if robot is in remote control mode. Dashboard server down maybe down')
