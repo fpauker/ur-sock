@@ -155,9 +155,9 @@ module UR
           elsif i == 'BOOL'
             rmd.fmt += 'c'
           elsif i == 'IN_USE'
-            #raise TypeError 'An input parameter is already in use.'
+            raise  'An input parameter is already in use.'
           else
-            #raise TypeError 'Unknown data type: ' + i
+            raise 'Unknown data type: ' + i
           end
         end
         rmd
