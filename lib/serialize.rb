@@ -120,8 +120,8 @@ module UR
         l = []
         l.append @recipe_id if @recipe_id
         names.each do |i|
-          raise RuntimeError.new('Uninitialized parameter: ' + i) unless @values[i]
-          l.push *@values[i]
+          raise RuntimeError.new('Uninitialized parameter: ' + i) if @values[i].nil?
+          l.push *(!!@values[i] == @values[i] ? (@values[i] == true ? 1 : 0) : @values[i])
         end
         l
       end
@@ -153,7 +153,7 @@ module UR
           elsif i == 'UINT8'
             rmd.fmt += 'C'
           elsif i == 'BOOL'
-            rmd.fmt += '?'
+            rmd.fmt += 'c'
           elsif i == 'IN_USE'
             #raise TypeError 'An input parameter is already in use.'
           else
