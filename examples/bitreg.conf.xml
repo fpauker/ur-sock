@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<rtde_config>
+  <recipe key="bitreg">
+    <!--<field name="input_bit_register_64" type="BOOL"/>-->
+    <field name="input_bit_register_64" type="BOOL"/>
+    <field name="input_int_register_0" type="INT32"/>
+  </recipe>
+  <recipe key="out">
+    <field name="input_bit_register_64" type="BOOL"/>
+    <field name="input_int_register_0" type="INT32"/>
+  </recipe>
+</rtde_config>
