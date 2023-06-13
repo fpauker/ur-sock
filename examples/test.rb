@@ -5,7 +5,7 @@ require_relative '../lib/ur-sock'
 conf = UR::XMLConfigFile.new "test.conf.xml"
 output_names, output_types = conf.get_recipe('out')
 
-con     = UR::Rtde.new('10.0.31.22').connect
+con     = UR::Rtde.new('131.159.6.109').connect
 version = con.controller_version
 
 ### Setup output
